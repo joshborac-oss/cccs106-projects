@@ -1,9 +1,7 @@
-# src/main.py
-import asyncio
 import flet as ft
 import mysql.connector
-from db_connection import connect_db   # Option A: hard-coded credentials
-
+from db_connection import connect_db
+import asyncio
 
 def _check_credentials_sync(username: str, password: str) -> bool:
     """Blocking DB check (runs in separate thread)."""
@@ -26,8 +24,8 @@ def main(page: ft.Page):
     # --- Page setup ---
     page.title = "User Login"
     try:
-        page.window.width = 400
-        page.window.height = 350
+        page.window.width = 1200
+        page.window.height = 800
     except Exception:
         pass
     try:
@@ -46,6 +44,7 @@ def main(page: ft.Page):
         weight=ft.FontWeight.BOLD,
         font_family="Arial",
         text_align=ft.TextAlign.CENTER,
+        color=ft.Colors.BLACK,
     )
 
     username_field = ft.TextField(
@@ -56,13 +55,17 @@ def main(page: ft.Page):
         autofocus=True,
         prefix_icon=ft.Icons.PERSON,
         color=ft.Colors.BLACK,  # <-- Input value color
-        hint_style=ft.TextStyle(color=ft.Colors.GREY_600),
+        hint_style=ft.TextStyle(color=ft.Colors.BLACK),
+        label_style=ft.TextStyle(color=ft.Colors.BLACK),
+        helper_style=ft.TextStyle(color=ft.Colors.BLACK),
+        bgcolor=ft.Colors.BLUE
+    
     )
     username_wrapper = ft.Container(
         content=username_field,
         padding=ft.padding.symmetric(vertical=6, horizontal=8),
         border_radius=8,
-        bgcolor=ft.Colors.WHITE,
+        bgcolor=ft.Colors.AMBER,
     )
 
     password_field = ft.TextField(
@@ -74,13 +77,16 @@ def main(page: ft.Page):
         can_reveal_password=True,
         prefix_icon=ft.Icons.LOCK,
         color=ft.Colors.BLACK,  # <-- Input value color
-        hint_style=ft.TextStyle(color=ft.Colors.GREY_600),
+        hint_style=ft.TextStyle(color=ft.Colors.BLACK),
+        label_style=ft.TextStyle(color=ft.Colors.BLACK),
+        helper_style=ft.TextStyle(color=ft.Colors.BLACK),
+        bgcolor=ft.Colors.BLUE
     )
     password_wrapper = ft.Container(
         content=password_field,
         padding=ft.padding.symmetric(vertical=6, horizontal=8),
         border_radius=8,
-        bgcolor=ft.Colors.WHITE,
+        bgcolor=ft.Colors.AMBER,
     )
 
     status_text = ft.Text("", size=12, color=ft.Colors.RED)
@@ -152,7 +158,6 @@ def main(page: ft.Page):
             actions=[ft.TextButton("OK", on_click=lambda ev: close_dialog(invalid_input_dialog))],
         )
 
-        # Databa
         # Database error dialog
         database_error_dialog = ft.AlertDialog(
             modal=True,
@@ -220,13 +225,13 @@ def main(page: ft.Page):
         width=100,
         style=ft.ButtonStyle(
         bgcolor=ft.Colors.BLUE_400,   
-        color=ft.Colors.WHITE         
+        color=ft.Colors.WHITE,    
         ),
     )
 
     inputs_column = ft.Column([username_wrapper, password_wrapper], spacing=20)
     button_container = ft.Container(
-        content=ft.Row([login_btn], alignment=ft.MainAxisAlignment.CENTER),
+        content=ft.Row([login_btn], alignment=ft.MainAxisAlignment.END),
         margin=ft.margin.only(left=0, top=20, right=40, bottom=0),
     )
 
@@ -237,7 +242,7 @@ def main(page: ft.Page):
         spacing=8,
     )
 
-    root_container = ft.Container(expand=True, bgcolor=ft.Colors.BLUE_GREY_50, content=content_column)
+    root_container = ft.Container(expand=True, bgcolor=ft.Colors.AMBER, content=content_column)
 
     page.add(root_container)
     page.update()
